@@ -20,11 +20,9 @@ class NdviViewSet(viewsets.ModelViewSet):
         # Perform the calculation here
         title = request.data.get('title')
         polygon = request.data.get('polygon')
-        start_date = request.data.get('start_date')
-        end_date = request.data.get('end_date')
         
         # Calculate NDVI
-        cvs_data = self.calculate_ndvi(title, polygon, start_date, end_date)
+        cvs_data = self.calculate_ndvi(title, polygon)
         
         print(f"Calculate cvs_data: {cvs_data}")
         
@@ -35,8 +33,6 @@ class NdviViewSet(viewsets.ModelViewSet):
         ndvi = Ndvi.objects.create(
             title=title,
             polygon=polygon,
-            start_date=start_date,
-            end_date = end_date,
             cvs_data = cvs_data,
             ndvi=34.0  # Assuming 'ndvi' is the field to store the calculation result
         )
@@ -51,21 +47,11 @@ class NdviViewSet(viewsets.ModelViewSet):
         # Return a successful response with the serialized data
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    def calculate_ndvi(self, title: str, polygon: Dict[str, Any], start_date: str, end_date: str) -> float:
-        print(f"title: {title} polygon: {polygon} start_date: {start_date} end_date: {end_date}")
-        
-        # Convert start_date and end_date to datetime objects
-        start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
-        end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
-
-        # Extract the timestamp or convert to the desired format
-        start_timestamp = start_date_obj.timestamp()  # Convert to Unix timestamp
-        end_timestamp = end_date_obj.timestamp()  # Convert to Unix timestamp
+    def calculate_ndvi(self, title: str, polygon: Dict[str, Any]) -> float:
+        print(f"title: {title} polygon: {polygon}")
 
         # Call the ndvi_gen function to calculate NDVI
-        # result = ndvi_gen(polygon['coordinates'][0], 400, int(start_date), int(end_date))  # Assuming width is 400
-        # ndvi_gen(polygon['coordinates'][0], 400, start_timestamp, end_timestamp)  # Assuming width is 400
-        ndvi_value = chart(polygon['coordinates'][0], 400, start_date, end_date)
+        ndvi_value = chart(polygon['coordinates'][0], 400, "2017-02-25", "2020-02-25")
         
         # print(f"NDVI value: {ndvi_value}")
         
