@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     
     # third party
     'rest_framework',
+    "corsheaders",
     
     # local
     'ndvi.apps.NdviConfig',
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -70,6 +72,12 @@ MIDDLEWARE = [
     
     # local
     'core.timing_middleware.TimingMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://agriguard-rwa.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:5174",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -103,7 +111,7 @@ DATABASES = {
     # }
     
       'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
+        # Replaxce this value with your local database's connection string.
         default= os.environ.get('DATABASE_URL'),
         conn_max_age=600
     ) 
