@@ -44,6 +44,10 @@ class NdviViewSet(viewsets.ModelViewSet):
         # Serialize the new instance
         serializer = self.get_serializer(ndvi)
         
+        #  # Calculate duration
+        # duration = request.end_date - request.start_time
+        # print(f"Request duration: {duration} seconds")
+        
         # Return a successful response with the serialized data
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
